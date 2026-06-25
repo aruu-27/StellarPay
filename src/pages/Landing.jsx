@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Wallet, Shield, Zap, RefreshCw, BarChart2, CheckCircle } from 'lucide-react';
+import { ArrowRight, Wallet, Shield, Zap, RefreshCw, BarChart2 } from 'lucide-react';
 
 /**
  * Landing page component - welcomes users and offers wallet connection trigger.
@@ -51,12 +51,6 @@ const Landing = ({ wallet, onEnterDashboard }) => {
       {/* Hero Section */}
       <div className="max-w-4xl text-center space-y-8 mt-4 md:mt-8">
         
-        {/* Stellar White Belt Status Badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-400">
-          <CheckCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-          Stellar White Belt Certified App
-        </div>
-
         <div className="space-y-4">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-none">
             Modern Payments on <br className="hidden sm:inline" />
