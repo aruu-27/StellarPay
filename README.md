@@ -1,191 +1,323 @@
 # StellarPay
 
-[![Build Status](https://github.com/StellarPay/stellarpay/actions/workflows/stellar-ci.yml/badge.svg)](https://github.com/StellarPay/stellarpay/actions)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Stellar](https://img.shields.io/badge/Stellar-Testnet-indigo.svg?logo=stellar)](https://stellar.org)
-[![React](https://img.shields.io/badge/React-19.0-cyan.svg?logo=react)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-8.0-purple.svg?logo=vite)](https://vite.dev)
+### Decentralized Escrow Platform Built on Stellar & Soroban
 
-StellarPay is a decentralized escrow and reputation platform built on the Stellar network and powered by Soroban smart contracts. It enables trustless escrow transactions (locks, releases, refunds, concessions) while automatically computing on-chain reputation trust ratings for all participants.
+🎥 **Demo Video**
 
----
+https://drive.google.com/file/d/1XdiRBa6sInlLqmFSyftHdSAv9h8t1sje/view
 
-## Live Demo & Deployments
+🌐 **Live Demo**
 
-*   **Live Demo (Netlify)**: [https://stellarpay.netlify.app/](https://stellarpay.netlify.app/)
-*   **Netlify Status**: Optimized with `netlify.toml` for Single Page Application (SPA) routing redirection rules.
+[StellarPay](https://stellarpay21.netlify.app/)
 
 ---
 
-## Features
+# Overview
 
-*   **Multi-Wallet Support**: Secure connections for Freighter, Albedo, and xBull wallets using a unified selector system.
-*   **Decentralized Escrow Manager**: Lock XLM tokens into smart contracts, release on completion, request refunds, or open disputes.
-*   **Trust Reputation Dashboard**: Dynamically tracks user success rates, completed deals, disputes, and total settled volume.
-*   **Trust Leaderboard**: Global leaderboard highlighting the top-performing escrow partners with interactive profiles and badges.
-*   **Transaction Lifecycle Tracker**: Real-time visual timeline (`Signing` → `Submitted` → `In Ledger` → `Confirmed`) with block explorer links.
-*   **Notification Center**: Real-time user alert center for tracking pending deposits, dispute actions, and releases.
-*   **Live Event Feed**: Polled activity feed showing live platform updates from Soroban smart contract logs.
-*   **Mobile-Responsive Design**: Tailored UI featuring a premium sliding navigation drawer menu for optimal mobile responsiveness.
-*   **CI/CD & Tests**: Automatically validated via GitHub Actions for Rust contract tests, client unit tests, and production builds.
+StellarPay is a decentralized escrow platform built on the Stellar Testnet using Soroban Smart Contracts.
+
+The platform enables users to securely lock XLM into escrow agreements, release or refund funds, manage disputes, and maintain an on-chain reputation score. It also provides analytics, transaction tracking, live activity updates, and multi-wallet support through a frontend-first architecture.
 
 ---
 
-## Architecture
+# Features
+
+- Multi-Wallet Support (Freighter, Albedo, xBull)
+- Wallet Connect / Disconnect
+- XLM Balance Display
+- Escrow Creation
+- Release & Refund Workflow
+- Dispute Resolution
+- Reputation Dashboard
+- Trust Leaderboard
+- Analytics Dashboard
+- Event Feed
+- Transaction Lifecycle Tracking
+- Mobile Responsive UI
+- Soroban Smart Contract Integration
+- GitHub Actions CI/CD
+- Frontend & Smart Contract Tests
+
+---
+
+# Tech Stack
+
+## Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- TypeScript
+
+## Blockchain
+
+- Stellar SDK
+- Soroban SDK
+- Horizon API
+- Soroban RPC
+
+## Wallets
+
+- Freighter
+- Albedo
+- xBull
+
+## Deployment
+
+- Netlify
+
+## CI/CD
+
+- GitHub Actions
+
+---
+
+# Architecture
 
 ```mermaid
-graph TD
-    Client[React/Vite Frontend] -->|Connect & Sign XDR| Wallet[Freighter / Albedo / xBull]
-    Client -->|Submit Signed TX| Horizon[Stellar Testnet Horizon Node]
-    Client -->|Simulate & Query State| RPC[Stellar Soroban RPC Server]
-    
-    subgraph On-Chain Smart Contracts
-        EscrowContract[Soroban Escrow Contract]
-        RepContract[Soroban Reputation Contract]
-        EscrowContract -->|Cross-Contract Update| RepContract
-    end
-    
-    Horizon -->|Emit Events| EscrowContract
-    Horizon -->|Emit Events| RepContract
+flowchart LR
+
+User --> Wallet
+
+Wallet --> Frontend
+
+Frontend --> Horizon
+
+Frontend --> SorobanRPC
+
+SorobanRPC --> EscrowContract
+
+EscrowContract --> ReputationContract
+
+EscrowContract --> StellarTestnet
+
+ReputationContract --> StellarTestnet
 ```
 
 ---
 
-## Smart Contracts
+# User Flow
 
-The contract methods are executed directly on the Stellar Testnet:
-
-*   **Escrow Contract Address**: `CDX4S5C6Y7U8I9O0P1L2K3J4H5G6F7D8S9A0P1O2I3U4Y5T6R7E8W9Q`
-*   **Reputation Contract Address**: `CBXBU753G3K2M6YV6N7R8E9T0Y1U2I3O4P5L6K7J8H9G0F1D2S3A4P5O`
-
----
-
-## Screenshots
-
-### StellarPay Dashboard Panel
-![StellarPay Dashboard](/public/dashboard_screenshot.png)
-
----
-
-## Technology Stack
-
-*   **Frontend**: React 19, Vite 8, Tailwind CSS v4, Lucide Icons, Framer Motion.
-*   **Blockchain**: Stellar SDK, Soroban Smart Contracts, Stellar Testnet Horizon.
-*   **DevOps**: GitHub Actions (Ubuntu workflows), Netlify SPA deployment configuration.
+```text
+Connect Wallet
+        ↓
+Create Escrow
+        ↓
+Lock XLM
+        ↓
+Release / Refund
+        ↓
+Reputation Updated
+        ↓
+Transaction Completed
+```
 
 ---
 
-## Installation
+# Screenshots
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/aruu-27/StellarPay.git
-   cd StellarPay
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   ```
+## Dashboard
+
+<img width="1916" height="931" src="https://github.com/user-attachments/assets/e5f894e0-820d-4a5d-a62c-142a3008d139" />
 
 ---
 
-## Running Locally
+## Wallet Integration
 
-To run the React developer environment locally:
+<img width="1912" height="970" src="https://github.com/user-attachments/assets/c44d9c0e-19fa-4316-a3fe-a48fcd3301ad" />
+
+---
+
+## Reputation Dashboard
+
+<img width="1919" height="932" src="https://github.com/user-attachments/assets/54030de3-bf3c-4dc9-9400-a1adc1cef697" />
+
+---
+
+## Escrow Manager
+
+<img width="1919" height="930" src="https://github.com/user-attachments/assets/93ad8301-d69c-4888-88c3-55e8a4535bc1" />
+
+---
+
+## Activity Feed
+
+<img width="1907" height="929" src="https://github.com/user-attachments/assets/e79f3328-b62d-4e5b-a678-832a21432cb5" />
+
+---
+
+## Analytics Dashboard
+
+<img width="1915" height="932" src="https://github.com/user-attachments/assets/a3f36208-b1fc-400d-a68f-d1c5d0ad2713" />
+
+---
+
+## Mobile Responsive UI
+
+<img width="380" height="810" src="https://github.com/user-attachments/assets/e31dc753-0134-4151-94b2-f47968b55b73" />
+
+---
+
+## CI/CD Pipeline
+
+<img width="1917" height="976" src="https://github.com/user-attachments/assets/551f7767-89a2-4fe7-aeec-a55a6bf1009f" />
+
+---
+
+# Smart Contracts
+
+## Escrow Contract
+
+Functions
+
+- Create Escrow
+- Release Funds
+- Refund Funds
+- Cancel Escrow
+- Open Dispute
+
+**Contract Address**
+
+```text
+<ESCROW_CONTRACT_ADDRESS>
+```
+
+---
+
+## Reputation Contract
+
+Functions
+
+- Create Profile
+- Update Reputation
+- Fetch Reputation
+- Trust Score
+
+**Contract Address**
+
+```text
+<REPUTATION_CONTRACT_ADDRESS>
+```
+
+---
+
+# Transaction Verification
+
+**Transaction Hash**
+
+```text
+<YOUR_TRANSACTION_HASH>
+```
+
+Verify Transaction
+
+https://stellar.expert/explorer/testnet/tx/<YOUR_TRANSACTION_HASH>
+
+---
+
+# Project Structure
+
 ```bash
+src/
+├── components/
+├── hooks/
+├── pages/
+├── services/
+├── contexts/
+├── utils/
+
+contracts/
+├── escrow/
+└── reputation/
+
+tests/
+
+.github/
+└── workflows/
+```
+
+---
+
+# Local Setup
+
+```bash
+git clone https://github.com/aruu-27/StellarPay.git
+
+cd StellarPay
+
+npm install
+
 npm run dev
 ```
-Open `http://localhost:5173` in your browser.
 
 ---
 
-## Testing
+# Build
 
-### Integration & Frontend Tests
-To run the automated ESM integration and formatter tests:
+```bash
+npm run build
+```
+
+---
+
+# Run Tests
+
+Frontend
+
 ```bash
 npm test
 ```
 
-### Smart Contract Unit Tests
-To run the Rust smart contract unit tests:
+Contracts
+
 ```bash
-cd contracts
 cargo test
 ```
 
 ---
 
-## Netlify Deployment
+# Deployment
 
-The application includes a `netlify.toml` file configured with Vite static building settings and Single Page Application (SPA) routing redirection rules:
-
-```toml
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[build]
-  publish = "dist"
-  command = "npm run build"
+```bash
+npm run build
 ```
 
-### Steps to Deploy to Netlify
-1. Connect your GitHub repository to [Netlify](https://www.netlify.com/).
-2. Select the repository `StellarPay`.
-3. Netlify will automatically detect the settings from `netlify.toml` (Build command: `npm run build`, Publish directory: `dist`).
-4. Click **Deploy Site**. The build will complete and deploy the SPA.
+Deploy the generated `dist/` folder to **Netlify**.
 
 ---
 
-## CI/CD
+# CI/CD
 
-The repository is configured with a GitHub Actions workflow in `.github/workflows/stellar-ci.yml`.
-Every push or pull request automatically triggers:
-1. **Rust Contract Checks**: Compiles smart contracts and runs all unit tests inside `contracts/`.
-2. **Frontend Tests**: Runs client integration tests using `npm test`.
-3. **Frontend Assets Checks**: Installs Node modules and runs `npm run build` to verify the React code compiles successfully.
+GitHub Actions automatically performs:
 
----
-
-## Contract Deployment (Stellar CLI)
-
-To deploy the Soroban smart contracts on Testnet manually:
-
-1. **Build contracts**:
-   ```bash
-   cd contracts
-   cargo build --target wasm32-unknown-unknown --release
-   ```
-2. **Deploy Reputation Contract**:
-   ```bash
-   stellar contract deploy \
-     --wasm target/wasm32-unknown-unknown/release/stellarpay_reputation.wasm \
-     --source admin_key \
-     --network testnet
-   ```
-3. **Deploy Escrow Contract**:
-   ```bash
-   stellar contract deploy \
-     --wasm target/wasm32-unknown-unknown/release/stellarpay_escrow.wasm \
-     --source admin_key \
-     --network testnet
-   ```
+- Install Dependencies
+- Build Application
+- Frontend Tests
+- Smart Contract Tests
 
 ---
 
-## Transaction Verification
+# Stellar Level 3 Checklist
 
-All StellarPay transactions submit transaction hashes to the Stellar network. You can verify transactions using the transaction hash by visiting:
-*   [Stellar Expert (Testnet Explorer)](https://stellar.expert/explorer/testnet)
+- Wallet Connection
+- Multi-Wallet Support
+- Balance Fetching
+- Smart Contract Deployment
+- Frontend Contract Calls
+- Event Streaming
+- Transaction Tracking
+- Error Handling
+- Loading States
+- Mobile Responsive UI
+- Frontend Tests
+- Smart Contract Tests
+- GitHub Actions CI/CD
+- Documentation
+- Live Demo
+- Demo Video
 
 ---
 
-## License
+# License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License
