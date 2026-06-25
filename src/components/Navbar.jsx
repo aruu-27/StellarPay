@@ -25,18 +25,11 @@ const Navbar = ({ wallet, theme, toggleTheme, onNavigate, currentPage }) => {
           
           {/* Logo & Brand */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNavigate('landing')}>
-            <div className="relative w-12 h-12 flex items-center justify-center rounded-xl bg-indigo-600 dark:bg-indigo-500/10 border border-indigo-500/20 shadow-md shadow-indigo-500/10">
-              <img 
-                src="/logo.png" 
-                alt="StellarPay" 
-                className="w-10 h-10 object-contain"
-                onError={(e) => {
-                  // Fallback in case image is missing at runtime
-                  e.target.style.display = 'none';
-                  e.target.parentNode.innerHTML = '⚡';
-                }}
-              />
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="StellarPay" 
+              className="w-10 h-10 object-contain"
+            />
             <span className="font-extrabold text-xl bg-gradient-to-r from-slate-900 via-indigo-950 to-indigo-900 dark:from-white dark:via-indigo-200 dark:to-cyan-200 bg-clip-text text-transparent tracking-tight">
               StellarPay
             </span>

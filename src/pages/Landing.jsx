@@ -97,9 +97,7 @@ const Landing = ({ wallet, onEnterDashboard }) => {
         <div className="pt-10 max-w-3xl mx-auto">
           <div className="relative rounded-2xl border border-slate-200/60 dark:border-zinc-800 bg-slate-100/50 dark:bg-zinc-900/40 p-2 shadow-2xl backdrop-blur-sm">
             <div className="rounded-xl border border-slate-200/50 dark:border-zinc-800/60 bg-white dark:bg-zinc-950 overflow-hidden flex flex-col aspect-video md:aspect-[21/9] justify-center items-center p-6 space-y-4">
-              <div className="relative w-24 h-24 rounded-3xl bg-indigo-600 dark:bg-indigo-500/10 border border-indigo-500/20 shadow-lg flex items-center justify-center">
-                <img src="/logo.png" alt="StellarPay" className="w-20 h-20 object-contain" />
-              </div>
+              <img src="/logo.png" alt="StellarPay" className="w-20 h-20 object-contain" />
               <div className="space-y-1">
                 <h3 className="font-extrabold text-slate-800 dark:text-zinc-200 text-lg">StellarPay Dashboard</h3>
                 <p className="text-xs text-slate-400 dark:text-zinc-500">Connect Freighter to inspect wallet status and balances</p>
