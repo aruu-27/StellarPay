@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Plus, ArrowRight, CheckCircle2, XCircle, AlertTriangle, RefreshCw, ExternalLink, HelpCircle, AlertCircle } from 'lucide-react';
+import { ShieldCheck, Plus, ArrowRight, CheckCircle2, XCircle, AlertTriangle, RefreshCw, ExternalLink, HelpCircle, AlertCircle, Landmark } from 'lucide-react';
 import { apiService } from '../services/apiService';
 import { sendPayment } from '../services/stellarService';
 import { toast } from 'react-hot-toast';
 import { shortenAddress } from '../utils/formatters';
+import { isValidStellarAddress, validateAmount } from '../utils/validators';
 
 const EscrowPanel = ({ wallet }) => {
   const { address } = wallet;
@@ -11,6 +12,7 @@ const EscrowPanel = ({ wallet }) => {
   const [loading, setLoading] = useState(true);
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
+  const [errors, setErrors] = useState({});
   const [isCreating, setIsCreating] = useState(false);
 
   // Transaction Tracker state
@@ -71,17 +73,34 @@ const EscrowPanel = ({ wallet }) => {
     setTxDetails({ type: '', hash: '', error: '' });
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!recipient.trim()) {
+      newErrors.recipient = 'Recipient address is required.';
+    } else if (!isValidStellarAddress(recipient.trim())) {
+      newErrors.recipient = 'Invalid Stellar address format (must start with G and be 56 characters).';
+    } else if (recipient.trim() === address) {
+      newErrors.recipient = 'Cannot lock funds for your own address.';
+    }
+
+    const amountError = validateAmount(amount, parseFloat(wallet.balance || 0));
+    if (amountError) {
+      newErrors.amount = amountError;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleCreateEscrow = async (e) => {
     e.preventDefault();
-    if (!recipient || !amount) {
-      toast.error('Please fill in all fields');
-      return;
-    }
-    if (parseFloat(amount) <= 0) {
-      toast.error('Amount must be positive');
+    if (!validateForm()) {
+      toast.error('Please fix the errors in the form.');
       return;
     }
 
+    setErrors({});
     setIsCreating(true);
     
     // We execute a real on-chain transfer to lock the funds, or simulate contract call on-chain
@@ -91,9 +110,9 @@ const EscrowPanel = ({ wallet }) => {
       // We send it to the Escrow contract's representation or recipient. To keep it safe, we send it to recipient
       // or a secure admin account, or register a real lockup on testnet.
       // For developer UX, we execute a payment to the recipient representing contract deposit.
-      const tx = await sendPayment(address, recipient, amount, `StellarPay Escrow Lockup`);
+      const tx = await sendPayment(address, recipient.trim(), amount, `StellarPay Escrow Lockup`);
       // Now register it in our backend indexer
-      return apiService.createEscrow(address, recipient, amount, tx.hash);
+      return apiService.createEscrow(address, recipient.trim(), amount, tx.hash);
     };
 
     try {
@@ -336,42 +355,84 @@ const EscrowPanel = ({ wallet }) => {
             </div>
 
             <form onSubmit={handleCreateEscrow} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-600 dark:text-zinc-400">
+              {/* Recipient Input */}
+              <div className="space-y-1">
+                <label htmlFor="escrow-recipient" className="text-xs font-bold text-slate-555 dark:text-zinc-400 block">
                   Recipient Address (Stellar Account)
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="G..."
-                  value={recipient}
-                  onChange={(e) => setRecipient(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 text-xs focus:ring-1 focus:ring-indigo-500 outline-none"
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-zinc-500">
+                    <Landmark className="w-4 h-4" />
+                  </div>
+                  <input
+                    type="text"
+                    id="escrow-recipient"
+                    disabled={isCreating}
+                    placeholder="GBCDEF...XYZ"
+                    value={recipient}
+                    onChange={(e) => setRecipient(e.target.value)}
+                    className={`w-full py-2.5 pl-10 pr-4 text-xs rounded-xl border bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${
+                      errors.recipient 
+                        ? 'border-rose-500/50 focus:ring-rose-500' 
+                        : 'border-slate-200 dark:border-zinc-800'
+                    }`}
+                  />
+                </div>
+                {errors.recipient && (
+                  <p className="text-[11px] text-rose-500 flex items-center gap-1 font-semibold">
+                    <AlertCircle className="w-3 h-3" /> {errors.recipient}
+                  </p>
+                )}
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-600 dark:text-zinc-400">
+              {/* Amount Input */}
+              <div className="space-y-1">
+                <label htmlFor="escrow-amount" className="text-xs font-bold text-slate-555 dark:text-zinc-400 block">
                   Lockup Amount (XLM)
                 </label>
-                <input
-                  type="number"
-                  step="0.0001"
-                  required
-                  placeholder="100.0000"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950 text-xs focus:ring-1 focus:ring-indigo-500 outline-none"
-                />
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="any"
+                    id="escrow-amount"
+                    disabled={isCreating}
+                    placeholder="100.00"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className={`w-full py-2.5 px-4 text-xs rounded-xl border bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${
+                      errors.amount 
+                        ? 'border-rose-500/50 focus:ring-rose-500' 
+                        : 'border-slate-200 dark:border-zinc-800'
+                    }`}
+                  />
+                  <span className="absolute inset-y-0 right-0 pr-4 flex items-center text-xs font-bold text-slate-400 dark:text-zinc-500 pointer-events-none">
+                    XLM
+                  </span>
+                </div>
+                {errors.amount && (
+                  <p className="text-[11px] text-rose-500 flex items-center gap-1 font-semibold">
+                    <AlertCircle className="w-3 h-3" /> {errors.amount}
+                  </p>
+                )}
               </div>
 
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isCreating || txStep === 1 || txStep === 2 || txStep === 3}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 text-white text-xs font-bold shadow-md cursor-pointer transition-all active:scale-98"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/10 hover:shadow-lg hover:shadow-indigo-600/20 active:scale-95 transition-all duration-200 cursor-pointer"
               >
-                <Plus className="w-4 h-4" />
-                Fund & Lock Escrow
+                {isCreating ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Funding Escrow...
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4" />
+                    Fund & Lock Escrow
+                  </>
+                )}
               </button>
             </form>
 

@@ -10,6 +10,13 @@ StellarPay is a decentralized escrow and reputation platform built on the Stella
 
 ---
 
+## Live Demo & Deployments
+
+*   **Live Demo (Netlify)**: [https://stellarpay.netlify.app/](https://stellarpay.netlify.app/)
+*   **Netlify Status**: Optimized with `netlify.toml` for Single Page Application (SPA) routing redirection rules.
+
+---
+
 ## Features
 
 *   **Multi-Wallet Support**: Secure connections for Freighter, Albedo, and xBull wallets using a unified selector system.
@@ -19,8 +26,8 @@ StellarPay is a decentralized escrow and reputation platform built on the Stella
 *   **Transaction Lifecycle Tracker**: Real-time visual timeline (`Signing` → `Submitted` → `In Ledger` → `Confirmed`) with block explorer links.
 *   **Notification Center**: Real-time user alert center for tracking pending deposits, dispute actions, and releases.
 *   **Live Event Feed**: Polled activity feed showing live platform updates from Soroban smart contract logs.
-*   **Mobile-Responsive Design**: Tailored UI featuring a tabbed navigation panel for optimal viewing on smaller screens.
-*   **CI/CD & Tests**: Automatically validated via GitHub Actions for Rust contract tests and client production builds.
+*   **Mobile-Responsive Design**: Tailored UI featuring a premium sliding navigation drawer menu for optimal mobile responsiveness.
+*   **CI/CD & Tests**: Automatically validated via GitHub Actions for Rust contract tests, client unit tests, and production builds.
 
 ---
 
@@ -55,23 +62,8 @@ The contract methods are executed directly on the Stellar Testnet:
 
 ## Screenshots
 
-### Dashboard
-*(Placeholder for Dashboard: shows total volume, transaction logs, and recent activities)*
-
-### Wallet Selection
-*(Placeholder for Wallet Selection Modal: Freighter, Albedo, and xBull choices)*
-
-### Escrow Manager
-*(Placeholder for Escrow Manager: lockup input form and active contract actions)*
-
-### Reputation Dashboard
-*(Placeholder for Reputation Dashboard: trust rating, completed/failed counts, leaderboard)*
-
-### Notifications
-*(Placeholder for Notifications bell dropdown panel and unread markers)*
-
-### Mobile View
-*(Placeholder for Mobile View: responsive tab bar layout and custom fit screens)*
+### StellarPay Dashboard Panel
+![StellarPay Dashboard](/public/dashboard_screenshot.png)
 
 ---
 
@@ -79,7 +71,7 @@ The contract methods are executed directly on the Stellar Testnet:
 
 *   **Frontend**: React 19, Vite 8, Tailwind CSS v4, Lucide Icons, Framer Motion.
 *   **Blockchain**: Stellar SDK, Soroban Smart Contracts, Stellar Testnet Horizon.
-*   **DevOps**: GitHub Actions (Ubuntu workflows), Vercel SPA deployment.
+*   **DevOps**: GitHub Actions (Ubuntu workflows), Netlify SPA deployment configuration.
 
 ---
 
@@ -87,8 +79,8 @@ The contract methods are executed directly on the Stellar Testnet:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/stellarpay.git
-   cd stellarpay
+   git clone https://github.com/aruu-27/StellarPay.git
+   cd StellarPay
    ```
 2. Install dependencies:
    ```bash
@@ -113,10 +105,10 @@ Open `http://localhost:5173` in your browser.
 
 ## Testing
 
-### Integration Tests
-To run the automated ESM integration tests:
+### Integration & Frontend Tests
+To run the automated ESM integration and formatter tests:
 ```bash
-node --test tests/stellar.test.js
+npm test
 ```
 
 ### Smart Contract Unit Tests
@@ -128,21 +120,26 @@ cargo test
 
 ---
 
-## Deployment
+## Netlify Deployment
 
-The application is optimized for static hosting platforms like Vercel or Netlify.
+The application includes a `netlify.toml` file configured with Vite static building settings and Single Page Application (SPA) routing redirection rules:
 
-### Production Build
-Create the production-ready build files:
-```bash
-npm run build
+```toml
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build]
+  publish = "dist"
+  command = "npm run build"
 ```
 
-### Preview Locally
-Preview the production build locally:
-```bash
-npm run preview
-```
+### Steps to Deploy to Netlify
+1. Connect your GitHub repository to [Netlify](https://www.netlify.com/).
+2. Select the repository `StellarPay`.
+3. Netlify will automatically detect the settings from `netlify.toml` (Build command: `npm run build`, Publish directory: `dist`).
+4. Click **Deploy Site**. The build will complete and deploy the SPA.
 
 ---
 
@@ -151,7 +148,8 @@ npm run preview
 The repository is configured with a GitHub Actions workflow in `.github/workflows/stellar-ci.yml`.
 Every push or pull request automatically triggers:
 1. **Rust Contract Checks**: Compiles smart contracts and runs all unit tests inside `contracts/`.
-2. **Frontend Assets Checks**: Installs Node modules and runs `npm run build` to verify the React code compiles.
+2. **Frontend Tests**: Runs client integration tests using `npm test`.
+3. **Frontend Assets Checks**: Installs Node modules and runs `npm run build` to verify the React code compiles successfully.
 
 ---
 
@@ -185,15 +183,6 @@ To deploy the Soroban smart contracts on Testnet manually:
 
 All StellarPay transactions submit transaction hashes to the Stellar network. You can verify transactions using the transaction hash by visiting:
 *   [Stellar Expert (Testnet Explorer)](https://stellar.expert/explorer/testnet)
-
-Example Transaction Hash: `t_5c3ab87901de49bc98ef7a123bcdef56`
-
----
-
-## Future Improvements
-
-*   **Decentralized Dispute Resolution (Oracles)**: Implement multi-signature dispute resolution powered by authorized public judges.
-*   **Multi-Asset Escrow**: Support ERC-20 equivalent Stellar assets (e.g. USDC, EURC) alongside XLM.
 
 ---
 
