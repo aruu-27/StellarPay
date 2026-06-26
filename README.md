@@ -297,6 +297,8 @@ GitHub Actions automatically performs:
 
 ---
 
+<<<<<<< HEAD
+=======
 # Stellar Level 3 Checklist
 
 - Wallet Connection
@@ -321,3 +323,4 @@ GitHub Actions automatically performs:
 # License
 
 MIT License
+>>>>>>> 732d690 (ci: fix github actions node version and add package engines)
