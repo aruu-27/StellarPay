@@ -179,7 +179,7 @@ Functions
 **Contract Address**
 
 ```text
-<ESCROW_CONTRACT_ADDRESS>
+CDMLNC5EUTGZDAPOJSKGYGGOVPOSUFMRUXIWUB4C3ERJZIQSMXMDDI6N
 ```
 
 ---
@@ -196,7 +196,7 @@ Functions
 **Contract Address**
 
 ```text
-<REPUTATION_CONTRACT_ADDRESS>
+CDWJQYLPI6SBNGTUGAN4V3SA7GEE6LZIOMMU46CQPM4NHDTSGGU47HQO
 ```
 
 ---
@@ -206,12 +206,12 @@ Functions
 **Transaction Hash**
 
 ```text
-<YOUR_TRANSACTION_HASH>
+be4425c1c8cd263d23495054c3105de3484b23b9c2a593b7948a8937928c2aee
 ```
 
 Verify Transaction
 
-https://stellar.expert/explorer/testnet/tx/<YOUR_TRANSACTION_HASH>
+https://stellar.expert/explorer/testnet/tx/be4425c1c8cd263d23495054c3105de3484b23b9c2a593b7948a8937928c2aee
 
 ---
 
